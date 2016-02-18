@@ -87,6 +87,7 @@
 	crypto_sign_ed25519_keypair/0,
 	crypto_sign_ed25519_public_to_curve25519/1,
 	crypto_sign_ed25519_secret_to_curve25519/1,
+	crypto_sign_ed25519_sk_to_pk/1,
 	crypto_sign_ed25519_PUBLICKEYBYTES/0,
 	crypto_sign_ed25519_SECRETKEYBYTES/0
 ]).
@@ -189,6 +190,7 @@ crypto_curve25519_scalarmult(_Secret, _BasePoint) -> erlang:nif_error(nif_not_lo
 crypto_sign_ed25519_keypair() -> erlang:nif_error(nif_not_loaded).
 crypto_sign_ed25519_public_to_curve25519(_PublicKey) -> erlang:nif_error(nif_not_loaded).
 crypto_sign_ed25519_secret_to_curve25519(_SecretKey) -> erlang:nif_error(nif_not_loaded).
+crypto_sign_ed25519_sk_to_pk(_SecretKey) -> erlang:nif_error(nif_not_loaded).
 crypto_sign_ed25519_PUBLICKEYBYTES() -> erlang:nif_error(nif_not_loaded).
 crypto_sign_ed25519_SECRETKEYBYTES() -> erlang:nif_error(nif_not_loaded).
 

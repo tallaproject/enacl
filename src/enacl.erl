@@ -75,6 +75,7 @@
 	crypto_sign_ed25519_keypair/0,
 	crypto_sign_ed25519_public_to_curve25519/1,
 	crypto_sign_ed25519_secret_to_curve25519/1,
+	crypto_sign_ed25519_sk_to_pk/1,
 	crypto_sign_ed25519_public_size/0,
 	crypto_sign_ed25519_secret_size/0
 ]).
@@ -698,6 +699,13 @@ crypto_sign_ed25519_secret_to_curve25519(SecretKey) ->
 	R = enacl_nif:crypto_sign_ed25519_secret_to_curve25519(SecretKey),
 	erlang:bump_reductions(?ED25519_SECRET_TO_CURVE_REDS),
 	R.
+
+%% @doc crypto_sign_ed25519_sk_to_pk/1 computes a given Ed 25519 public key
+%% from a secret key.
+%% @end
+-spec crypto_sign_ed25519_sk_to_pk(SecretKey :: binary()) -> binary().
+crypto_sign_ed25519_sk_to_pk(SecretKey) ->
+	enacl_nif:crypto_sign_ed25519_sk_to_pk(SecretKey).
 
 -spec crypto_sign_ed25519_public_size() -> pos_integer().
 crypto_sign_ed25519_public_size() ->
