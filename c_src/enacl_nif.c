@@ -17,8 +17,7 @@ ERL_NIF_TERM nacl_error_tuple(ErlNifEnv *env, char *error_atom) {
 /* Initialization */
 static
 int enif_crypto_load(ErlNifEnv *env, void **priv_data, ERL_NIF_TERM load_info) {
-	sodium_init();
-	return 0;
+	return sodium_init() >= 0 ? 0 : 1;
 }
 
 /* Low-level functions (Hashing, String Equality, ...) */
@@ -292,7 +291,9 @@ ERL_NIF_TERM enif_crypto_box(ErlNifEnv *env, int argc, ERL_NIF_TERM const argv[]
 		return nacl_error_tuple(env, "alloc_failed");
 	}
 
-	crypto_box(result.data, padded_msg.data, padded_msg.size, nonce.data, pk.data, sk.data);
+	if (crypto_box(result.data, padded_msg.data, padded_msg.size, nonce.data, pk.data, sk.data) == 0) {
+		return nacl_error_tuple(env, "crypto_box_failed");
+	}
 
 	return enif_make_sub_binary(
 		env,
@@ -357,7 +358,9 @@ ERL_NIF_TERM enif_crypto_box_beforenm(ErlNifEnv *env, int argc, ERL_NIF_TERM con
 		return nacl_error_tuple(env, "alloc_failed");
 	}
 
-	crypto_box_beforenm(k.data, pk.data, sk.data);
+	if (crypto_box_beforenm(k.data, pk.data, sk.data) == 0) {
+		return nacl_error_tuple(env, "crypto_box_beforenm_failed");
+	}
 
 	return enif_make_binary(env, &k);
 }
