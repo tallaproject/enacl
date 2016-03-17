@@ -20,6 +20,12 @@ int enif_crypto_load(ErlNifEnv *env, void **priv_data, ERL_NIF_TERM load_info) {
 	return sodium_init() >= 0 ? 0 : 1;
 }
 
+/* Upgrade */
+static
+int enif_crypto_upgrade(ErlNifEnv *env, void **priv_data, void **old_priv_data, ERL_NIF_TERM load_info) {
+	return 0;
+}
+
 /* Low-level functions (Hashing, String Equality, ...) */
 
 static
@@ -1101,4 +1107,4 @@ static ErlNifFunc nif_funcs[] = {
 	{"scramble_block_16", 2, enif_scramble_block_16}
 };
 
-ERL_NIF_INIT(enacl_nif, nif_funcs, enif_crypto_load, NULL, NULL, NULL);
+ERL_NIF_INIT(enacl_nif, nif_funcs, enif_crypto_load, /* reload */ NULL, enif_crypto_upgrade, /* unload */ NULL);
