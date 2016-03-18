@@ -73,11 +73,13 @@
 %% Ed 25519.
 -export([
 	crypto_sign_ed25519_keypair/0,
+	crypto_sign_ed25519_seed_keypair/1,
 	crypto_sign_ed25519_public_to_curve25519/1,
 	crypto_sign_ed25519_secret_to_curve25519/1,
 	crypto_sign_ed25519_sk_to_pk/1,
 	crypto_sign_ed25519_public_size/0,
-	crypto_sign_ed25519_secret_size/0
+	crypto_sign_ed25519_secret_size/0,
+	crypto_sign_ed25519_seed_size/0
 ]).
 
 %% Low-level functions
@@ -682,6 +684,20 @@ crypto_sign_ed25519_keypair() ->
 	{PK, SK} = enacl_nif:crypto_sign_ed25519_keypair(),
 	#{ public => PK, secret => SK }.
 
+%% @doc crypto_sign_ed25519_seed_keypair/1 creates a new Ed 25519 Public/Secret keypair from a seed.
+%%
+%% Generates and returns a new key pair for the Ed 25519 signature scheme
+%% generated from a deterministically given seed value.
+%%
+%% The return value is a map in order to avoid using the public key as a secret
+%% key and vice versa.
+%%
+%% @end
+-spec crypto_sign_ed25519_seed_keypair(binary()) -> #{ atom() => binary() }.
+crypto_sign_ed25519_seed_keypair(Seed) ->
+	{PK, SK} = enacl_nif:crypto_sign_ed25519_seed_keypair(Seed),
+	#{ public => PK, secret => SK }.
+
 %% @doc crypto_sign_ed25519_public_to_curve25519/1 converts a given Ed 25519 public
 %% key to a Curve 25519 public key.
 %% @end
@@ -714,6 +730,10 @@ crypto_sign_ed25519_public_size() ->
 -spec crypto_sign_ed25519_secret_size() -> pos_integer().
 crypto_sign_ed25519_secret_size() ->
 	enacl_nif:crypto_sign_ed25519_SECRETKEYBYTES().
+
+-spec crypto_sign_ed25519_seed_size() -> pos_integer().
+crypto_sign_ed25519_seed_size() ->
+	enacl_nif:crypto_sign_ed25519_SEEDBYTES().
 
 %% Obtaining random bytes
 
