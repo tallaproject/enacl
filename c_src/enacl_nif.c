@@ -616,11 +616,16 @@ ERL_NIF_TERM enif_crypto_sign_verify_detached(ErlNifEnv* env, int argc, ERL_NIF_
 
 static
 ERL_NIF_TERM enif_crypto_box_SEALBYTES(ErlNifEnv *env, int argc, ERL_NIF_TERM const argv[]) {
+#ifdef crypto_box_SEALBYTES
 	return enif_make_int64(env, crypto_box_SEALBYTES);
+#else
+	return nacl_error_tuple(env, "sodium_seal_api_unavailable");
+#endif
 }
 
 static
 ERL_NIF_TERM enif_crypto_box_seal(ErlNifEnv *env, int argc, ERL_NIF_TERM const argv[]) {
+#ifdef crypto_box_SEALBYTES
 	ErlNifBinary key, msg, ciphertext;
 
 	if (
@@ -641,11 +646,15 @@ ERL_NIF_TERM enif_crypto_box_seal(ErlNifEnv *env, int argc, ERL_NIF_TERM const a
 	  key.data);
 
 	return enif_make_binary(env, &ciphertext);
+#else
+	return nacl_error_tuple(env, "sodium_seal_api_unavailable");
+#endif
 }
 
 
 static
 ERL_NIF_TERM enif_crypto_box_seal_open(ErlNifEnv *env, int argc, ERL_NIF_TERM const argv[]) {
+#ifdef crypto_box_SEALBYTES
 	ErlNifBinary pk, sk, ciphertext, msg;
 
 	if (
@@ -675,6 +684,9 @@ ERL_NIF_TERM enif_crypto_box_seal_open(ErlNifEnv *env, int argc, ERL_NIF_TERM co
 	}
 
 	return enif_make_binary(env, &msg);
+#else
+	return nacl_error_tuple(env, "sodium_seal_api_unavailable");
+#endif
 }
 
 /* Secret key cryptography */
